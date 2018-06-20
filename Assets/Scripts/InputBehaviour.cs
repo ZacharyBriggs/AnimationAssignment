@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 using UnityEditor;
 using UnityEngine;
 
 public class InputBehaviour : MonoBehaviour
 {
     public float Speed;
+
+    private bool IsMoving;
+
+    private bool IsRunning;
 	// Use this for initialization
 	void Start ()
     {
@@ -20,19 +25,36 @@ public class InputBehaviour : MonoBehaviour
 	    Animator animate = GetComponent<Animator>();
         Vector3 direction = Vector3.zero;
 	    if (Input.GetKeyDown(KeyCode.LeftShift))
+	    {
 	        Speed *= 2;
+	        animate.SetBool("IsRunning",true);
+	    }
+
 	    if (Input.GetKeyUp(KeyCode.LeftShift))
+	    {
 	        Speed /= 2;
-        if (Input.GetButton("left"))
+	        animate.SetBool("IsRunning", false);
+	    }
+
+	    if (Input.GetKey(KeyCode.A))
         {
             rb2d.AddForce(Vector2.left * Speed);
+            animate.SetBool("IsWalking", true);
+            if (this.gameObject.transform.rotation.y == 0)
+            {
+
+            }
         }
 
-        if (Input.GetButton("right"))
+        else if (Input.GetKey(KeyCode.D))
         {
             rb2d.AddForce(Vector2.right * Speed);
+            animate.SetBool("IsWalking", true);
         }
-
+        else
+        {
+            animate.SetBool("IsWalking", false);
+        }
         if (Input.GetButtonDown("Jump"))
         {
 
