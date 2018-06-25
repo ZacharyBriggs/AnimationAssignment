@@ -12,17 +12,17 @@ public class InputBehaviour : MonoBehaviour
     private bool IsMoving;
 
     private bool IsRunning;
-	// Use this for initialization
-	void Start ()
+    private Animator animate;
+    // Use this for initialization
+    void Start ()
     {
-		
-	}
+        animate = GetComponent<Animator>();
+    }
 	
 	// Update is called once per frame
 	void Update ()
 	{
-	    Rigidbody2D rb2d = GetComponent<Rigidbody2D>();
-	    Animator animate = GetComponent<Animator>();
+        Rigidbody2D rb2d = GetComponent<Rigidbody2D>();
         Vector3 direction = Vector3.zero;
 	    if (Input.GetKeyDown(KeyCode.LeftShift))
 	    {
@@ -57,7 +57,12 @@ public class InputBehaviour : MonoBehaviour
         }
         if (Input.GetButtonDown("Jump"))
         {
-
+            animate.SetBool("IsJumping", true);
+            rb2d.AddForce(Vector2.up * Speed);
         }
 	}
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        animate.SetBool("IsJumping", false);
+    }
 }
